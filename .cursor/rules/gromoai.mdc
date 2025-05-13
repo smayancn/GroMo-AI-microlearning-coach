@@ -44,7 +44,7 @@ config/
 config.py → environment variable parsing
 
 .env → NOT committed (use .env.example for structure)
-
+/
 tests/
 
 test_api.py, test_recommender.py
