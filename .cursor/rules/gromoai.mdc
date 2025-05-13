@@ -6,7 +6,7 @@ alwaysApply: false
 1. Project Context
 This project is an AI microlearning assistant for GroMo Partners (GPs).
 
-It tracks sales performance, identifies skill weaknesses, and recommends personalized training content.
+It tracks sales performance, identifies skill weaknesses, and recommends personalized training content..
 
 Backend: Flask API with ML logic and SQLite
 
