@@ -1,0 +1,158 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+1. Project Context
+This project is an AI microlearning assistant for GroMo Partners (GPs).
+
+It tracks sales performance, identifies skill weaknesses, and recommends personalized training content.
+
+Backend: Flask API with ML logic and SQLite
+
+Frontend: Streamlit for MVP, React optional later
+
+Data: GP sales logs, video metadata, recommendation rules
+
+2. Project Structure Rules
+backend/
+
+app.py → Flask API entry point
+
+recommender.py → Recommendation logic
+
+ml_model.py → ML classification and loading logic
+
+database.db → SQLite data store
+
+/models → ML models
+
+/data → GP logs (CSV), training datasets
+
+/utils → helper utilities
+
+frontend/
+
+dashboard.py → Streamlit MVP interface
+
+/assets → UI media (icons, images)
+
+/components → reusable UI blocks (optional if using React)
+
+config/
+
+config.py → environment variable parsing
+
+.env → NOT committed (use .env.example for structure)
+
+tests/
+
+test_api.py, test_recommender.py
+
+.cursorrules → This file (should always exist in root)
+
+3. Python Coding Standards
+Follow PEP8 + type hints on all functions.
+
+Use Google-style docstrings:
+
+"""Summary
+
+Args:
+input_name (type): Description
+
+Returns:
+return_type: Description
+"""
+
+Do not use hardcoded file paths. Use pathlib.Path or environment variables.
+
+ML models must be saved/loaded with joblib or pickle from a defined /models/ directory.
+
+4. AI Logic Guidelines
+recommend_content() must accept gp_id and product_type and return:
+{
+"video": str,
+"tip": str,
+"next_step": str
+}
+
+ML pipeline (in ml_model.py):
+
+Use scikit-learn with Pipeline and joblib
+
+Feature: conversion rate, product type, past success
+
+Target: topic_recommended or weakness_tag
+
+Use dummy data at first, but build with a placeholder for future real-time logs ingestion.
+
+5. API Rules
+Only expose POST endpoints for recommendation logic.
+
+Endpoint: POST /recommend
+
+Request body:
+{
+"gp_id": "GP001",
+"product_type": "loan"
+}
+
+Response body must match recommender output format.
+
+Wrap all endpoints with try/except and return proper status codes.
+
+6. Streamlit MVP Rules
+Input fields: GP ID (text), Product Type (select)
+
+On submit: fetch POST /recommend and display:
+
+Embedded video
+
+Sales tip (text)
+
+Motivational message or CTA
+
+Don’t use hardcoded GP IDs. Allow any input.
+
+Layout should be responsive and clean. Use columns where needed.
+
+7. Testing & Automation
+Use pytest for testing backend modules
+
+Include at least:
+
+test_recommender.py
+
+test_api.py (mock Flask test client)
+
+Add .github/workflows/ci.yml with install + test steps (optional for later)
+
+8. Security & Best Practices
+Never commit .env
+
+Avoid using real video URLs or sales data in public code
+
+Ensure CORS is enabled only for dev or frontend domain
+
+Any machine learning models must be versioned
+
+Dockerize backend and frontend separately
+
+9. Cursor AI-Specific Prompts
+When using Cursor AI to generate code, prefer:
+
+"Generate Flask POST endpoint using gp_id and product_type"
+
+"Generate ML classifier to predict weak skill area based on sales performance"
+
+"Build Streamlit form to call /recommend and render video + tip"
+
+Avoid:
+
+Long monolithic scripts
+
+Mixing frontend and backend logic in the same file
+
+
+One-file MVPs

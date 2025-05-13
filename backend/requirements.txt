@@ -1,0 +1,6 @@
+Flask>=2.0
+requests>=2.20 # Potentially for future internal API calls or data fetching
+python-dotenv>=0.15 # For loading .env files
+pandas>=1.3 # For data manipulation for ML
+scikit-learn>=1.0 # For ML model training
+# Add other backend-specific libraries like SQLAlchemy later 
