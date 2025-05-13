@@ -1,139 +1,169 @@
-# Project Demo Guide
+# Comprehensive Project Demo Guide
 
-This guide provides step-by-step instructions to set up and run the project for a demonstration.
+This guide provides detailed step-by-step instructions to set up and run the project from scratch, suitable for anyone who has just downloaded this directory.
 
-## Prerequisites
+## 0. Prerequisites
 
-1.  **Python Installed**: Ensure you have Python 3.7+ installed on your system.
-2.  **Git Installed**: For cloning the repository (if you haven't already).
-3.  **Terminal/Command Prompt**: You will need a terminal to execute commands.
-4.  **(Optional but Recommended) Virtual Environments**: To keep dependencies isolated, it's highly recommended to use virtual environments (e.g., `venv` or `conda`).
+Before you begin, ensure you have the following installed on your system:
 
-## Setup Instructions
+1.  **Python**: Version 3.7 or higher.
+    *   You can check by opening a terminal and typing `python --version` or `python3 --version`.
+    *   If not installed, download it from [python.org](https://www.python.org/downloads/).
+2.  **pip**: Python's package installer. It usually comes with Python.
+    *   You can check by typing `pip --version` or `pip3 --version`.
+3.  **Git**: For cloning the repository (if you haven't already).
+    *   Download from [git-scm.com](https://git-scm.com/downloads).
+4.  **Terminal/Command Prompt**: You will need a terminal (like Command Prompt on Windows, Terminal on macOS/Linux) to execute commands.
 
-### 1. Clone the Repository (if you haven't already)
+## 1. Clone the Repository & Navigate to Project Directory
+
+If you haven't already, clone the project repository to your local machine and navigate into the project's root directory.
 
 ```bash
-git clone <your-repository-url>
-cd <your-repository-name>
+git clone <your-repository-url>  # Replace <your-repository-url> with the actual URL
+cd <your-repository-name>      # Replace <your-repository-name> with the directory name
 ```
+All subsequent commands assume you are starting from the project's root directory (`GroMo-AI-microlearning-coach`).
 
-### 2. Set Up the Backend
+## 2. Create and Configure the Environment File (`.env`)
 
-The backend provides the core logic and API.
+This project uses an `.env` file in the **project root directory** to manage configuration settings.
+
+a.  **Create the file**: In the project's root directory (e.g., `GroMo-AI-microlearning-coach/`), create a file named `.env`.
+
+b.  **Populate the `.env` file**: Add the following content. These values are based on defaults in `config/config.py`. Uncomment and modify lines as needed (e.g., for `DATABASE_URL`, `MODEL_PATH`, `SECRET_KEY`).
+
+    ```env
+    # Project Root .env file
+
+    # Backend Configuration
+    FLASK_APP=backend/app.py
+    FLASK_ENV=development  # Set to 'production' for deployment
+    BACKEND_PORT=5000
+    # DATABASE_URL=sqlite:///backend/database.db # Example: Uncomment and set your database URL if used
+    # MODEL_PATH=models/your_model.joblib      # Example: Uncomment and set your ML model path if used
+
+    # Frontend Configuration
+    STREAMLIT_SERVER_PORT=8501
+    # BACKEND_API_BASE_URL=http://localhost:5000 # This is usually derived from BACKEND_PORT by config.py
+                                               # Only set this if you need to override the default.
+
+    # Other shared configurations
+    # SECRET_KEY=your_very_strong_unique_secret_key # Example: Uncomment and set a strong secret key if your app needs it
+    ```
+    Your `config/config.py` will load these variables.
+
+## 3. Set Up and Run the Backend Server
+
+The backend provides the API for the frontend. **You'll need one terminal window for the backend.**
 
 a.  **Navigate to the backend directory:**
+    From the project root:
     ```bash
     cd backend
     ```
 
-b.  **(Recommended) Create and activate a virtual environment:**
+b.  **(Highly Recommended) Create and activate a Python virtual environment:** This isolates dependencies for this part of the project.
     ```bash
-    python -m venv venv
-    # On Windows
-    venv\Scripts\activate
-    # On macOS/Linux
-    source venv/bin/activate
+    python -m venv venv  # Create a virtual environment named 'venv'
     ```
+    Activate it:
+    *   On Windows:
+        ```bash
+        venv\Scripts\activate
+        ```
+    *   On macOS/Linux:
+        ```bash
+        source venv/bin/activate
+        ```
+    Your terminal prompt should change to indicate the virtual environment is active (e.g., `(venv) ...`).
 
 c.  **Install backend dependencies:**
+    While in the `backend` directory with the virtual environment active:
     ```bash
     pip install -r requirements.txt
     ```
-    This will install Flask, pandas, scikit-learn, and other necessary libraries.
 
-d.  **(Optional) Configure Environment Variables:**
-    If your backend requires a `.env` file for configuration (e.g., API keys, database URLs), create a `.env` file in the `backend` directory and populate it with the necessary variables. The `python-dotenv` library will automatically load it. Example:
-    ```env
-    # backend/.env
-    FLASK_ENV=development
-    DEBUG=True
-    # Add other necessary variables
-    ```
-
-e.  **Run the Backend Server:**
-    Open `backend/app.py` and check how it's started. Typically, for a Flask app, you would run:
+d.  **Run the Backend Flask Server:**
+    Still in the `backend` directory with the virtual environment active:
     ```bash
     python app.py
     ```
-    Alternatively, you might use:
-    ```bash
-    flask run
+    You should see output indicating the Flask server is running, including lines like:
     ```
-    (You might need to set `FLASK_APP=app.py` as an environment variable if you use `flask run` and it's not automatically detected: `export FLASK_APP=app.py` or `set FLASK_APP=app.py` on Windows).
+     * Running on http://127.0.0.1:5000
+     * Running on http://<your_local_ip_address>:5000 
+    ```
+    (The port number will match `BACKEND_PORT` from your `.env` file).
+    **Keep this terminal window open and the backend server running.**
 
-    The backend server will likely start on `http://127.0.0.1:5000` (or another port if specified in `app.py`). Note the port it's running on.
+## 4. Set Up and Run the Frontend Application
 
-### 3. Set Up the Frontend
+The frontend is a Streamlit dashboard. **Open a NEW terminal window/tab for the frontend.** This is separate from the backend terminal.
 
-The frontend provides the user interface (dashboard).
-
-a.  **Open a new terminal window/tab.** It's important to keep the backend server running in its own terminal.
-
-b.  **Navigate to the project's root directory** (if you are in the `backend` directory, go one level up `cd ..`), then navigate to the `frontend` directory:
+a.  **Navigate to the frontend directory:**
+    From the project root (ensure you are in the project root, not still in `backend`):
     ```bash
     cd frontend
     ```
 
-c.  **(Recommended) Create and activate a virtual environment (separate from the backend's):**
+b.  **(Highly Recommended) Create and activate a Python virtual environment (separate from the backend's):**
     ```bash
-    python -m venv venv
-    # On Windows
-    venv\Scripts\activate
-    # On macOS/Linux
-    source venv/bin/activate
+    python -m venv venv  # Create a virtual environment named 'venv'
     ```
+    Activate it:
+    *   On Windows:
+        ```bash
+        venv\Scripts\activate
+        ```
+    *   On macOS/Linux:
+        ```bash
+        source venv/bin/activate
+        ```
+    Your terminal prompt should change.
 
-d.  **Install frontend dependencies:**
+c.  **Install frontend dependencies:**
+    While in the `frontend` directory with its virtual environment active:
     ```bash
     pip install -r requirements.txt
     ```
-    This will install Streamlit, requests, and other necessary libraries.
 
-e.  **(Optional) Configure Environment Variables:**
-    If your frontend requires a `.env` file for configuration (e.g., the URL of the backend API if it's not hardcoded), create a `.env` file in the `frontend` directory.
-    Example:
-    ```env
-    # frontend/.env
-    BACKEND_API_URL=http://127.0.0.1:5000/api 
-    # (Adjust if your backend runs on a different port or has a different API prefix)
-    ```
-    Your `dashboard.py` would need to be written to load this using `python-dotenv` and use it when making requests.
-
-f.  **Run the Frontend Application:**
+d.  **Run the Frontend Streamlit Application:**
+    Still in the `frontend` directory with its virtual environment active:
     ```bash
     streamlit run dashboard.py
     ```
-    Streamlit will typically open the application automatically in your web browser. If not, it will provide a URL (usually `http://localhost:8501`).
+    Streamlit will typically provide output like:
+    ```
+    You can now view your Streamlit app in your browser.
 
-## Running the Demo
+    Local URL: http://localhost:8501
+    Network URL: http://<your_local_ip_address>:8501
+    ```
+    (The port number will match `STREAMLIT_SERVER_PORT` from your `.env` file).
+    It should automatically open the application in your default web browser. If not, manually open one of the URLs provided.
 
-1.  **Start the Backend**: Ensure your backend server (from `backend/app.py`) is running. Check its terminal output for any errors and to confirm the URL it's serving on (e.g., `http://127.0.0.1:5000`).
-2.  **Start the Frontend**: Ensure your Streamlit frontend (`frontend/dashboard.py`) is running. It should open in your browser or provide a URL (e.g., `http://localhost:8501`).
-3.  **Interact with the Frontend**: Open the Streamlit URL in your browser. Perform the actions you want to showcase in your demo. The frontend will make requests to the backend API.
+## 5. Using the Application
 
-## Demo Flow Suggestions
-
-*   **Introduction**: Briefly introduce the project and its purpose.
-*   **Backend Check**: (Optional, for technical demos) Briefly show the backend terminal running and indicate it's ready.
-*   **Frontend Walkthrough**:
-    *   Open the Streamlit app in the browser.
-    *   Showcase the main features of the dashboard.
-    *   If there's data input, demonstrate that.
-    *   Show any outputs, visualizations, or recommendations generated.
-    *   Explain what's happening in the background (how the frontend interacts with the backend ML model/recommender).
-*   **Conclusion**: Summarize the key features shown.
+1.  Ensure the **Backend Server** (from Step 3) is running in its terminal.
+2.  Ensure the **Frontend Application** (from Step 4) is running in its terminal and open in your browser.
+3.  Interact with the Streamlit dashboard in your browser. Enter a GP ID, select a product, and click "Get Recommendation". The frontend will communicate with the backend to fetch and display the results.
 
 ## Troubleshooting Tips
 
-*   **Port Conflicts**: If an application fails to start due to a port already being in use, you may need to stop the other process using that port or configure your application to use a different port.
-    *   In `backend/app.py` (Flask), you can specify a port: `app.run(port=5001)`
-    *   For `streamlit run`, you can use: `streamlit run dashboard.py --server.port 8502`
-*   **Dependency Issues**: If `pip install` fails, ensure your Python/pip setup is correct and that the `requirements.txt` files are accurate. Check for error messages indicating missing system libraries.
-*   **API Connection Issues**: If the frontend cannot connect to the backend:
-    *   Verify the backend is running and accessible.
-    *   Check the URL the frontend is trying to reach (it might be hardcoded in `dashboard.py` or configured via an environment variable).
-    *   Look for CORS errors in the browser's developer console (if the frontend and backend are on different ports, CORS headers might be needed on the Flask backend).
-*   **Environment Variables**: Ensure `.env` files are correctly placed and loaded if your application relies on them.
+*   **`command not found` (e.g., `python`, `pip`, `streamlit`):**
+    *   Ensure Python (and pip) are installed and their installation directories are added to your system's PATH environment variable.
+    *   If virtual environments are active, these commands should point to the venv's versions.
+    *   `streamlit` is installed via `pip install -r requirements.txt` in the frontend's venv.
+*   **Port Conflicts**: If an application fails to start because a port is "already in use":
+    *   Stop the other process using that port.
+    *   Or, change the port in your `.env` file (`BACKEND_PORT` or `STREAMLIT_SERVER_PORT`) and restart the respective server. Remember to update the `BACKEND_API_BASE_URL` in `.env` or ensure `config.py` correctly picks up the new backend port if you change `BACKEND_PORT`.
+*   **Dependency Issues**: If `pip install` fails, check error messages. You might be missing system-level libraries or have network issues. Ensure your virtual environment is active.
+*   **Frontend Can't Connect to Backend (`Connection Error`)**:
+    *   Verify the backend server is running (check its terminal).
+    *   Verify the `BACKEND_API_BASE_URL` (derived or set in `.env`, and used in `frontend/dashboard.py` via `app_config`) correctly points to where your backend is running (host and port).
+    *   Check for firewall issues that might be blocking the connection.
+    *   Look for CORS (Cross-Origin Resource Sharing) errors in the browser's developer console (F12). If the frontend and backend run on different ports (they do by default: 8501 and 5000), the Flask backend (`backend/app.py`) might need the `Flask-CORS` extension if you encounter CORS issues, although `requests` from Streamlit to Flask usually don't have preflight issues that browsers enforce strictly.
+*   **`.env` file not found warning**: Ensure the `.env` file is in the **project root directory** and is named exactly `.env`.
 
-Good luck with your demo recording! 
+This more detailed guide should help anyone get your project up and running smoothly. Good luck with your demo! 
