@@ -7,7 +7,10 @@ The GroMo AI Microlearning Coach is a system designed to provide personalized, b
 2.  Recommending targeted microlearning materials (videos, tips, next steps).
 
 This project is currently in its initial development phase, with a functional prototype that includes an ML-driven recommendation engine.
-🎥 [Click here to watch the demo video](https://github.com/smayancn/GroMo-AI-microlearning-coach/blob/main/demo.mp4)
+## 🎥 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/-3oGSd0AD_0.jpg)](https://youtu.be/-3oGSd0AD_0)
+
 
 ## Current Features
 
