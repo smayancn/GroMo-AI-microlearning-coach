@@ -3,6 +3,11 @@ description:
 globs: 
 alwaysApply: false
 ---
+---
+description: 
+globs: 
+alwaysApply: false
+---
 1. Project Context
 This project is an AI microlearning assistant for GroMo Partners (GPs).
 
